@@ -87,35 +87,31 @@ function configure_make() {
     ZSTD_OUT_DIR="${pwd_path}/../output/android/zstd-${ABI}"
     XXHASH_OUT_DIR="${pwd_path}/../output/android/xxhash-${ABI}"
 
-    export LDFLAGS="${LDFLAGS} -L${OPENSSL_OUT_DIR}/lib -L${LZ4_OUT_DIR}/lib -L${ZSTD_OUT_DIR}/lib -L${XXHASH_OUT_DIR}/lib"
-    export CFLAGS="${CFLAGS} -I${OPENSSL_OUT_DIR}/include -I${LZ4_OUT_DIR}/include -I${ZSTD_OUT_DIR}/include -I${XXHASH_OUT_DIR}/include"
-    #export CFLAGS=$CFLAGS
-    #export LDFLAGS=$LDFLAGS
+    export LDFLAGS="${LDFLAGS} -L${OPENSSL_OUT_DIR}/lib"
+    export CFLAGS="${CFLAGS} -I${OPENSSL_OUT_DIR}/include"
     # export LDFLAGS="-Wl,-rpath-link,-L${LZ4_OUT_DIR}/lib,-L${OPENSSL_OUT_DIR}/lib $LDFLAGS "
 
     android_printf_global_params "$ARCH" "$ABI" "$ABI_TRIPLE" "$PREFIX_DIR" "$OUTPUT_ROOT"
 
-    #COMMON_L='--disable-zstd --disable-xxhash --disable-openssl --disable-lz4 --disable-md2man'
-    #COMMON_L='--disable-zstd --disable-xxhash --disable-openssl --disable-md2man'
-    COMMON_L='--disable-md2man'
+    COMMON_L=''
     #echo COMMON_L=$COMMON_L
 
     if [[ "${ARCH}" == "x86_64" ]]; then
 
-        ./configure --host=$(android_get_build_host "${ARCH}") --prefix="${PREFIX_DIR}" $COMMON_L --enable-ipv6 >"${OUTPUT_ROOT}/log/${ABI}.log" 2>&1
+        ./configure --host=$(android_get_build_host "${ARCH}") --prefix="${PREFIX_DIR}" $COMMON_L >"${OUTPUT_ROOT}/log/${ABI}.log" 2>&1
 
     elif [[ "${ARCH}" == "x86" ]]; then
 
-        ./configure --host=$(android_get_build_host "${ARCH}") --prefix="${PREFIX_DIR}" $COMMON_L --enable-ipv6 >"${OUTPUT_ROOT}/log/${ABI}.log" 2>&1
+        ./configure --host=$(android_get_build_host "${ARCH}") --prefix="${PREFIX_DIR}" $COMMON_L >"${OUTPUT_ROOT}/log/${ABI}.log" 2>&1
 
     elif [[ "${ARCH}" == "arm" ]]; then
 
-        ./configure --host=$(android_get_build_host "${ARCH}") --prefix="${PREFIX_DIR}" $COMMON_L --enable-ipv6 >"${OUTPUT_ROOT}/log/${ABI}.log" 2>&1
+        ./configure --host=$(android_get_build_host "${ARCH}") --prefix="${PREFIX_DIR}" $COMMON_L >"${OUTPUT_ROOT}/log/${ABI}.log" 2>&1
 
     elif [[ "${ARCH}" == "arm64" ]]; then
 
         # --enable-shared need lz4 cpp compile
-        ./configure --host=$(android_get_build_host "${ARCH}") --prefix="${PREFIX_DIR}" $COMMON_L --enable-ipv6 >"${OUTPUT_ROOT}/log/${ABI}.log" 2>&1
+        ./configure --host=$(android_get_build_host "${ARCH}") --prefix="${PREFIX_DIR}" $COMMON_L >"${OUTPUT_ROOT}/log/${ABI}.log" 2>&1
 
     else
         log_error "not support" && exit 1
